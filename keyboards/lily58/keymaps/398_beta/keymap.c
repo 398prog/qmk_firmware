@@ -1,6 +1,7 @@
 #include QMK_KEYBOARD_H
 #include <stdio.h>
 #include <print.h>
+#include <time.h>
 
 enum layer_number {
   _QWERTY = 0,
@@ -56,8 +57,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |   `  |   1  |   2  |   3  |   4  |   5  |                    |   6  |   7  |   8  |   9  |   0  |  +   |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |LCTRL | PGUP | PGDN | HOME | END  |PRINT |-------.    ,-------|S-all | Left |  Up  | Down |Right |Enter |
- * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
- * | CAPS |      |      |      |      |      |-------|    |-------| Undo | Cut  | Copy |Paste |      |   \  |
+ * |------+------+------+------+------+------| CAPS  |    |       |------+------+------+------+------+------|
+ * |      |      |      |      |      |      |-------|    |-------| Undo | Cut  | Copy |Paste |      |   \  |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
  *                   |      |      |      | /Space  /       \Space \  |      |      |      |
  *                   |      |      |      |/       /         \      \ |      |      |      |
@@ -66,8 +67,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_LOWER] = LAYOUT( \
   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,                     KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12, \
   KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                      KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_EQL, \
-  KC_LCTRL, KC_PGUP, KC_PGDN, KC_HOME, KC_END, _______,                   KC_SALL, KC_LEFT, KC_UP, KC_DOWN,   KC_RGHT, KC_ENT, \
-  KC_CAPS,  _______, _______, _______, _______, _______, _______, _______, KC_UNDO, KC_CUT, KC_COPY, KC_PSTE, _______, KC_BSLS, \
+  KC_LCTRL, KC_PGUP, KC_PGDN, KC_HOME, KC_END, KC_PSCR,                   KC_SALL, KC_LEFT, KC_UP, KC_DOWN,   KC_RGHT, KC_ENT, \
+  _______,  _______, _______, _______, _______, _______, KC_CAPS, _______, KC_UNDO, KC_CUT, KC_COPY, KC_PSTE, _______, KC_BSLS, \
                              XXXXXXX, _______, _______,  KC_SPC,  KC_SPC,  _______, _______, XXXXXXX\
 ),
 /* RAISE
@@ -157,8 +158,6 @@ bool showedJump = true;
 const char *read_logo(void);
 void set_keylog(uint16_t keycode, keyrecord_t *record);
 const char *read_keylog(void);
-void set_typespeed(void);
-const char *read_typespeed(void);
 
 /* logic */
 static void render_luna(int LUNA_X, int LUNA_Y) {
@@ -311,32 +310,22 @@ static void print_status_narrow(void) {
 
     /* typespeed */
     // uint8_t n = get_current_wpm();
-    int n = get_current_wpm();
-    char    wpm_str[8];
+    // int n = get_current_wpm();
 
     oled_set_cursor(0, 5);
-    oled_write("WPM:", false);
+    // oled_write("WPM:", false);
 
-    oled_set_cursor(1, 6);
-
-    sprintf(wpm_str,"%03d",n);
-    oled_write(wpm_str, false);
-
-    // wpm_str[4] = '\0';
-    // wpm_str[3] = '0' + n % 10;
-    // wpm_str[2] = '0' + (n /= 10) % 10;
-    // wpm_str[1] = '0' + n / 10;
-    // wpm_str[0] = ' ';
+    // oled_set_cursor(1, 6);
+    // sprintf(wpm_str,"%03d",n);
+    // oled_write(wpm_str, false);
 
     /* keylogger */
-    oled_set_cursor(0, 8);
+    // oled_set_cursor(0, 8);
     oled_write("KEY:",false);
     oled_write(read_keylog(), false);
 
     /* KEYBOARD PET RENDER START */
-    // if (current_wpm > 0){
     render_luna(0, 13);
-    //  }
     /* KEYBOARD PET RENDER END */
 }
 
